@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>你的名字 · 个人主页</title>
+  <meta name="description" content="你的名字的个人主页 — 在这里填写你的身份、方向和一句话介绍。" />
+  <meta name="theme-color" content="#050505" />
+  <meta property="og:title" content="你的名字 · 个人主页" />
+  <meta property="og:description" content="在这里填写你的一句话介绍。" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <canvas class="stars" id="stars" aria-hidden="true"></canvas>
+  <div class="progress" aria-hidden="true"></div>
+  <div class="cursor-glow" id="cursor-glow" aria-hidden="true"></div>
+  <div class="glow glow-1" aria-hidden="true"></div>
+  <div class="glow glow-2" aria-hidden="true"></div>
+  <div class="glow glow-3" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="logo" href="#top" aria-label="首页">
+      <span class="logo-mark"></span>
+      <span class="logo-text">你的名字</span>
+    </a>
+
+    <nav class="nav-links" id="nav-links" aria-label="主导航">
+      <a href="#about" data-nav>关于</a>
+      <a href="#work" data-nav>作品</a>
+      <a href="#blog" data-nav>博客</a>
+      <a href="#contact" data-nav>联系</a>
+    </nav>
+
+    <button class="nav-toggle" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <nav class="mobile-links" aria-label="移动导航">
+      <a href="#about" data-mobile-nav>关于</a>
+      <a href="#work" data-mobile-nav>作品</a>
+      <a href="#blog" data-mobile-nav>博客</a>
+      <a href="#contact" data-mobile-nav>联系</a>
+    </nav>
+  </div>
+
+  <main id="top">
+    <section class="hero">
+      <p class="eyebrow mono">
+        <span class="pulse" aria-hidden="true"></span>
+        你的身份 · 你的状态
+      </p>
+      <h1 class="hero-title">
+        你的主标题，<br />
+        你的<em>关键词</em>。
+      </h1>
+      <p class="hero-sub">
+        在这里填写你的职业、专业或当前身份。
+        用一两句话介绍你正在做的事情，以及希望分享的内容。
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#work">查看项目</a>
+        <a class="btn btn-ghost" href="#contact">联系我</a>
+      </div>
+      <div class="hero-meta mono">
+        <span>当前状态</span>
+        <span class="dot" aria-hidden="true">·</span>
+        <span>交流意向</span>
+      </div>
+      <div class="scroll-hint mono" aria-hidden="true">
+        <span class="scroll-line"></span>
+        向下滚动
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>兴趣一</span><i>✦</i>
+        <span>兴趣二</span><i>✦</i>
+        <span>兴趣三</span><i>✦</i>
+        <span>个人关键词</span><i>✦</i>
+        <span>学习 · 实践 · 分享</span><i>✦</i>
+        <span>你的座右铭</span><i>✦</i>
+        <span>兴趣一</span><i>✦</i>
+        <span>兴趣二</span><i>✦</i>
+        <span>兴趣三</span><i>✦</i>
+        <span>个人关键词</span><i>✦</i>
+        <span>学习 · 实践 · 分享</span><i>✦</i>
+        <span>你的座右铭</span><i>✦</i>
+      </div>
+    </div>
+
+    <section id="about" class="section about">
+      <div class="section-label mono">01 — 关于</div>
+      <div class="about-grid">
+        <h2 class="section-title">
+          你的理念，<br />
+          你的表达。
+        </h2>
+        <div class="about-copy">
+          <p>
+            在这里介绍你的背景、经历或兴趣，让访客了解你是谁。
+          </p>
+          <p>
+            在这里描述你的日常工作、学习内容或近期计划。
+          </p>
+          <ul class="traits">
+            <li>
+              <span class="trait-key mono">方向</span>
+              <span>你的研究或工作方向</span>
+            </li>
+            <li>
+              <span class="trait-key mono">技术</span>
+              <span>技能一 · 技能二 · 技能三</span>
+            </li>
+            <li>
+              <span class="trait-key mono">节奏</span>
+              <span>阶段一 → 阶段二 → 阶段三</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="curiosity">
+        <span class="curiosity-mark mono">∞</span>
+        <span class="curiosity-label">在这里填写你的个人签名</span>
+      </p>
+    </section>
+
+    <section id="work" class="section work">
+      <div class="section-label mono">02 — 作品</div>
+      <h2 class="section-title tight">一些个人项目</h2>
+      <div class="work-list">
+        <article class="work-item">
+          <div class="work-index mono">01</div>
+          <div class="work-body">
+            <div class="work-head">
+              <h3>项目名称一</h3>
+              <span class="work-year mono">YYYY</span>
+            </div>
+            <p>在这里介绍第一个项目的用途、特点，以及你在其中完成的工作。</p>
+            <div class="tags">
+              <span>技术标签一</span>
+              <span>技术标签二</span>
+              <span>项目标签</span>
+            </div>
+          </div>
+          <a class="work-link" href="https://example.com/project-one" target="_blank" rel="noopener noreferrer"
+            aria-label="查看 项目名称一">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              aria-hidden="true">
+              <path d="M7 17L17 7M17 7H7M17 7V17" />
+            </svg>
+          </a>
+        </article>
+        <article class="work-item">
+          <div class="work-index mono">02</div>
+          <div class="work-body">
+            <div class="work-head">
+              <h3>项目名称二</h3>
+              <span class="work-year mono">YYYY</span>
+            </div>
+            <p>在这里介绍第二个项目的目标、实现方式，以及值得展示的成果。</p>
+            <div class="tags">
+              <span>技术标签一</span>
+              <span>技术标签二</span>
+              <span>项目标签</span>
+            </div>
+          </div>
+          <a class="work-link" href="https://example.com/project-two" target="_blank" rel="noopener noreferrer"
+            aria-label="查看 项目名称二">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+              aria-hidden="true">
+              <path d="M7 17L17 7M17 7H7M17 7V17" />
+            </svg>
+          </a>
+        </article>
+      </div>
+      <a class="section-more mono" href="https://example.com/github" target="_blank" rel="noopener noreferrer">
+        更多项目
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+    </section>
+
+    <section id="blog" class="section blog">
+      <div class="section-label mono">03 — 博客</div>
+      <h2 class="section-title tight">零零散散的笔记</h2>
+      <div class="notes">
+        <a class="note" href="https://example.com/blog" target="_blank" rel="noopener noreferrer">
+          <time class="mono" datetime="">YYYY-MM-DD</time>
+          <h3>文章标题</h3>
+          <p>在这里填写文章摘要，让访客了解文章的主要内容。</p>
+          <span class="note-arrow mono">阅读 →</span>
+        </a>
+      </div>
+      <a class="section-more mono" href="https://example.com/blog" target="_blank" rel="noopener noreferrer">
+        查看全部文章
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+          aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+    </section>
+
+    <section id="contact" class="section contact">
+      <div class="section-label mono">04 — 联系</div>
+      <div class="contact-panel">
+        <h2 class="section-title">
+          如果碰巧同路，<br />欢迎聊聊。
+        </h2>
+        <p class="contact-copy">
+          在这里填写你希望接收的交流或合作类型。<br />
+          在这里补充你的联系方式或回复时间。
+        </p>
+        <div class="contact-actions">
+          <button class="btn btn-primary" type="button" data-copy="hello@example.com"
+            data-copy-label="hello@example.com" title="点击复制">hello@example.com</button>
+          <div class="socials">
+            <a href="https://example.com/github" class="social" target="_blank" rel="noopener noreferrer"
+              aria-label="GitHub">GitHub</a>
+            <a href="https://example.com/qq" class="social" target="_blank" rel="noopener noreferrer"
+              aria-label="QQ">QQ</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-word" aria-hidden="true">YOUR NAME</div>
+    <div class="footer-row">
+      <span class="mono">© YYYY 你的名字</span>
+      <span class="footer-line" aria-hidden="true"></span>
+      <span class="mono">你的签名</span>
+    </div>
+    <div class="beian mono">
+      <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">你的 ICP 备案号</a>
+      <span class="beian-sep" aria-hidden="true">·</span>
+      <span>
+      <!-- 如需备案图标，请在此添加你自己的本地图标。 -->
+      <a href="https://beian.mps.gov.cn/" rel="noreferrer" target="_blank">你的公安备案号</a>
+      </span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
