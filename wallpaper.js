@@ -20,10 +20,12 @@
   function update() {
     const playing = enabled && !reduced.matches && inView && pageActive && !document.hidden;
     scenery.dataset.wallpaper = reduced.matches ? 'static' : playing ? 'playing' : enabled ? 'suspended' : 'paused';
-    toggle.hidden = reduced.matches;
-    toggle.setAttribute('aria-pressed', String(enabled));
-    toggle.setAttribute('aria-label', enabled ? '暂停壁纸动效' : '播放壁纸动效');
-    toggle.querySelector('span').textContent = enabled ? '暂停壁纸' : '播放壁纸';
+    toggle.hidden = false;
+    toggle.disabled = reduced.matches;
+    toggle.setAttribute('aria-pressed', String(enabled && !reduced.matches));
+    toggle.setAttribute('aria-label', reduced.matches ? '系统已启用减少动态效果，壁纸保持静止' : enabled ? '暂停动态壁纸' : '播放动态壁纸');
+    toggle.title = toggle.getAttribute('aria-label');
+    toggle.querySelector('span').textContent = reduced.matches ? '系统已关闭动效' : enabled ? '暂停动态壁纸' : '播放动态壁纸';
     toggle.querySelector('.icon').className = `icon ${enabled ? 'icon-pause' : 'icon-play'}`;
   }
   toggle.addEventListener('click', () => {

@@ -321,23 +321,23 @@ html[data-input="keyboard"] .hero > :not(.scroll-cue) { animation: none; }
 .hero > .wallpaper-toggle { animation: none; }
 @media (hover:hover) and (pointer:fine) { .wallpaper-toggle:hover { color: var(--text); } }
 
-/* Detailed contour tracing of the original scene; only highlights move. */
+/* Original contours stay intact; a feathered SVG layer moves the visible water. */
 .coast-art { display: block; width: 100%; height: 100%; }
-.coast-stars { animation: coast-twinkle 7s linear infinite alternate; }
-.stars-0 { animation-duration: 7s; animation-delay: -2s; }
-.stars-1 { animation-duration: 9s; animation-delay: -5s; }
-.stars-2 { animation-duration: 8s; animation-delay: -3s; }
-.stars-3 { animation-duration: 10s; animation-delay: -7s; }
-.coast-wave-mid { animation: coast-water-shimmer 10s var(--ease) infinite alternate; animation-delay: -3s; }
-.coast-wave-near { animation: coast-water-shimmer 8s var(--ease) infinite alternate-reverse; animation-delay: -5s; }
-.coast-reflections { animation: coast-beacon-light 8s linear infinite alternate; animation-delay: -2s; }
+.coast-stars { animation: coast-twinkle 3s linear infinite alternate; }
+.stars-0 { animation-duration: 3.2s; animation-delay: -2s; }
+.stars-1 { animation-duration: 4.2s; animation-delay: -5s; }
+.stars-2 { animation-duration: 3.6s; animation-delay: -3s; }
+.stars-3 { animation-duration: 4.6s; animation-delay: -7s; }
+.coast-water-surface { animation: coast-water-flow 3.6s linear infinite alternate; animation-delay: -1s; will-change: transform; }
+.coast-reflections { animation: coast-beacon-light 3.8s linear infinite alternate; animation-delay: -2s; }
 .coast-art .coast-motion { animation-play-state: paused; }
 .scenery[data-wallpaper="playing"] .coast-motion { animation-play-state: running; }
-@keyframes coast-twinkle { from { opacity: .35; } to { opacity: 1; } }
-@keyframes coast-water-shimmer { from { transform: translate(-.8px,-.3px); opacity: .08; } to { transform: translate(1.2px,.6px); opacity: .28; } }
-@keyframes coast-beacon-light { from { opacity: .4; } to { opacity: .85; } }
-@media (max-width:700px) { .coast-wave-mid { animation: none; opacity: .12; } }
+@keyframes coast-twinkle { from { opacity: .2; } to { opacity: 1; } }
+@keyframes coast-water-flow { from { transform: translate(-3px,-1.5px); } to { transform: translate(5px,3.5px); } }
+@keyframes coast-beacon-light { from { opacity: .2; } to { opacity: 1; } }
+@media (max-width:700px) { .coast-water-surface { animation-duration: 4.2s; } }
 @media (prefers-reduced-motion:reduce) {
   .coast-art .coast-motion { animation: none !important; }
-  .wallpaper-toggle { display: none !important; }
 }
+
+.wallpaper-toggle:disabled { cursor: default; opacity: .85; }
