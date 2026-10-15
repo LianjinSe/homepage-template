@@ -94,8 +94,7 @@ img { display: block; max-width: 100%; object-fit: cover; }
 button:focus-visible,a:focus-visible,summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
 [hidden] { display: none !important; }
 ::selection { color: var(--text); background: rgb(85 142 220 / 45%); }
-.scenery { position: fixed; z-index: -1; inset: 0; background: #0c1b2d url('assets/coast-night.webp') center center / cover no-repeat; pointer-events: none; }
-.scenery-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.scenery { position: fixed; z-index: -1; inset: 0; background: #0c1b2d; overflow: hidden; pointer-events: none; }
 .scenery::after { content: ""; position: absolute; inset: 0; background: rgb(6 17 34 / 7%); }
 html[data-theme="light"] .scenery::after { background: rgb(224 236 249 / 87%); }
 .glass { border: 1px solid var(--glass-edge); background: var(--glass); box-shadow: inset 0 1px 0 rgb(227 238 255 / 7%),var(--shadow); backdrop-filter: blur(24px) saturate(135%); -webkit-backdrop-filter: blur(24px) saturate(135%); }
@@ -241,7 +240,6 @@ html[data-input="keyboard"] .hero > :not(.scroll-cue) { animation: none; }
 }
 @media (max-width:700px) {
   html { scroll-padding-top: 104px; }
-  .scenery { background-image: url('assets/coast-night-mobile.webp'); background-position: 58% center; }
   .scenery::after { background: rgb(6 17 34 / 24%); }
   .site-header { width: calc(100% - 32px); min-height: 66px; margin-top: max(16px,env(safe-area-inset-top)); top: max(12px,env(safe-area-inset-top)); padding: 9px 10px 9px 13px; gap: 8px; border-radius: 22px; }
   .brand { gap: 9px; }
@@ -322,4 +320,36 @@ html[data-input="keyboard"] .hero > :not(.scroll-cue) { animation: none; }
 .wallpaper-toggle .icon { width: 14px; height: 14px; }
 .hero > .wallpaper-toggle { animation: none; }
 @media (hover:hover) and (pointer:fine) { .wallpaper-toggle:hover { color: var(--text); } }
-@media (prefers-reduced-motion:reduce) { .scenery-canvas,.wallpaper-toggle { display: none !important; } }
+
+/* All scenery is inline SVG. Motion uses native transform/opacity animations. */
+.coast-art { display: block; width: 100%; height: 100%; }
+.coast-stars { animation: coast-twinkle 6s linear infinite alternate; }
+.stars-0 { animation-duration: 6s; animation-delay: -2s; }
+.stars-1 { animation-duration: 8s; animation-delay: -5s; }
+.stars-2 { animation-duration: 7s; animation-delay: -3s; }
+.stars-3 { animation-duration: 9s; animation-delay: -7s; }
+.coast-sparks { animation: coast-glimmer 7s linear infinite alternate; animation-delay: -4s; }
+.coast-cloud-back { animation: coast-cloud-float 48s linear infinite alternate; animation-delay: -18s; }
+.coast-cloud-front { animation: coast-cloud-float 36s linear infinite alternate-reverse; animation-delay: -12s; }
+.coast-beacon-glow { animation: coast-glimmer 9s linear infinite alternate; animation-delay: -3s; }
+.coast-reflections { animation: coast-reflection-drift 8s var(--ease) infinite alternate; animation-delay: -2s; }
+.coast-ripples-far,.coast-wave-far { animation: coast-distant-tide 14s var(--ease) infinite alternate; animation-delay: -4s; }
+.coast-ripples-mid,.coast-wave-mid { animation: coast-middle-tide 11s var(--ease) infinite alternate; animation-delay: -6s; }
+.coast-ripples-near,.coast-wave-near { animation: coast-near-tide 9s var(--ease) infinite alternate; animation-delay: -3s; }
+.coast-art .coast-motion { animation-play-state: paused; }
+.scenery[data-wallpaper="playing"] .coast-motion { animation-play-state: running; }
+@keyframes coast-twinkle { from { opacity: .3; } to { opacity: .95; } }
+@keyframes coast-glimmer { from { opacity: .55; } to { opacity: 1; } }
+@keyframes coast-cloud-float { from { transform: translate(-12px,0); } to { transform: translate(14px,-5px); } }
+@keyframes coast-distant-tide { from { transform: translate(-6px,-1px); } to { transform: translate(8px,2px); } }
+@keyframes coast-middle-tide { from { transform: translate(7px,-2px); } to { transform: translate(-10px,4px); } }
+@keyframes coast-near-tide { from { transform: translate(10px,-3px); opacity: .7; } to { transform: translate(-12px,7px); opacity: 1; } }
+@keyframes coast-reflection-drift { from { transform: translate(-3px,0); opacity: .6; } to { transform: translate(3px,3px); opacity: 1; } }
+@media (max-width:700px) {
+  /* Keep the nearest tide and star layers; reduce independent moving layers. */
+  .coast-cloud-back,.coast-ripples-far,.coast-ripples-mid { animation: none; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .coast-art .coast-motion { animation: none !important; }
+  .wallpaper-toggle { display: none !important; }
+}

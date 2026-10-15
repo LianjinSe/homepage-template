@@ -31,11 +31,9 @@ python3 -m http.server 8080 --bind 127.0.0.1
 index.html          页面内容、元信息、链接与对话框
 styles.css          字体、主题与响应式布局
 script.js           菜单、主题、对话框和复制交互
-wallpaper.js        夜海涟漪、星光与播放控制
+wallpaper.js        壁纸播放偏好、暂停与可见性控制
 favicon.svg         通用头像及站点图标占位图
 assets/
-  coast-night.webp          桌面背景
-  coast-night-mobile.webp   手机背景
   icons/                    Tabler 图标及许可证
 fonts/              本地字体及许可文件
 LICENSE             项目 MIT 许可证
@@ -74,7 +72,7 @@ LICENSE             项目 MIT 许可证
 
 - 本项目代码、文档及通用占位图标采用 [MIT License](LICENSE)。再分发时保留版权与许可文本。
 - 图标来自 [Tabler Icons](https://github.com/tabler/tabler-icons)，v3.35.0，MIT；完整许可位于 `assets/icons/LICENSE.txt`。
-- 夜海背景由图像生成工具制作并导出为 WebP，作为模板的通用视觉素材；可以替换成自己的图片。
+- 夜海壁纸由内联 SVG 绘制，使用路径、圆形、渐变和 CSS 动画；作为模板源码随 MIT 许可分发。
 - JetBrains Mono 字体采用 SIL Open Font License 1.1，见 `fonts/OFL-JetBrains-Mono.txt`。
 - Noto Serif SC 字体采用 SIL Open Font License 1.1，见 `fonts/OFL-Noto-Serif-SC.txt`。
 - 随附 Source Han Serif 版权与许可声明见 `fonts/OFL-Source-Han-Serif.txt`；目录中无单独以 Source Han Serif 命名的字体文件。
@@ -83,6 +81,10 @@ LICENSE             项目 MIT 许可证
 
 ## 动态壁纸
 
-`wallpaper.js` 使用现有本地夜海图片，在 WebGL 中对水面进行轻微位移，并让原有星点缓慢明暗变化。首屏的「暂停壁纸 / 播放壁纸」按钮可以独立控制背景动效，偏好保存在 `homepage-wallpaper` 中。
+整个壁纸是 `index.html` 中 `.coast-art` 对应的内联 SVG：星空、云层、远山、灯塔、海面、倒影、近岸浪花和礁石均由矢量图形组成，不包含嵌入的位图、Canvas 或 WebGL。SVG 通过 `viewBox` 和 `preserveAspectRatio` 自适应屏幕。
 
-桌面渲染上限为 24 帧/秒，手机为 20 帧/秒，并限制画布像素数。页面隐藏或滚动离开首屏时停止渲染，回到首屏再继续。开启「减少动态效果」、WebGL 不可用或图形上下文丢失时显示原始静态壁纸；开启省流量时默认暂停。动态效果不需要视频下载或第三方动画库。
+动画定义在 `styles.css`：星点分组闪烁、云层缓慢漂移、远中近三层海浪错速移动、灯塔光晕与倒影渐变明暗。动画只改变 `transform` 与 `opacity`，由浏览器原生动画系统执行。手机端减少独立运动图层。
+
+`wallpaper.js` 只管理播放状态，不逐帧绘图。首屏的「暂停壁纸 / 播放壁纸」按钮保存 `homepage-wallpaper` 偏好；页面隐藏、离开首屏或开启减少动态效果时暂停。省流量模式默认暂停。禁用 JavaScript 时，SVG 壁纸仍完整显示为静态插画；减少动态效果的 CSS 规则也可独立生效。
+
+调整画面时编辑 HTML 中 SVG 的 `<defs>`、路径与图层；修改动效速度、幅度或方向时编辑 CSS 中 `coast-` 开头的动画。主页与模板分别保留同一份完整 SVG，不需要下载独立壁纸文件。
