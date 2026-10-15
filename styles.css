@@ -111,8 +111,6 @@ html[data-theme="light"] .scenery::after { background: rgb(224 236 249 / 87%); }
 .icon-mail { --icon: url('assets/icons/mail.svg'); }
 .icon-github { --icon: url('assets/icons/brand-github.svg'); }
 .icon-qq { --icon: url('assets/icons/brand-qq.svg'); }
-.icon-pause { --icon: url("assets/icons/player-pause.svg"); }
-.icon-play { --icon: url("assets/icons/player-play.svg"); }
 .icon-copy { --icon: url('assets/icons/copy.svg'); }
 .site-header { position: sticky; z-index: 10; top: max(20px,env(safe-area-inset-top)); width: min(calc(100% - 64px),1180px); min-height: 72px; margin: 40px auto 0; padding: 10px 16px 10px 22px; border-radius: 24px; display: flex; align-items: center; gap: 20px; background: var(--glass-chrome); }
 .brand { display: flex; align-items: center; gap: 13px; margin-right: auto; min-width: 0; }
@@ -315,29 +313,5 @@ html[data-input="keyboard"] .hero > :not(.scroll-cue) { animation: none; }
   .glass { background: var(--dialog); }
 }
 
-/* Ambient wallpaper can always be paused independently of page motion. */
-.wallpaper-toggle { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 4px 13px; margin: 20px auto -20px; background: var(--glass-chrome); border: 1px solid var(--glass-edge); border-radius: 999px; color: var(--text-2); font-size: 11px; }
-.wallpaper-toggle .icon { width: 14px; height: 14px; }
-.hero > .wallpaper-toggle { animation: none; }
-@media (hover:hover) and (pointer:fine) { .wallpaper-toggle:hover { color: var(--text); } }
-
-/* Original contours stay intact; a feathered SVG layer moves the visible water. */
+/* Static detailed SVG wallpaper: no playback controls or background animations. */
 .coast-art { display: block; width: 100%; height: 100%; }
-.coast-stars { animation: coast-twinkle 3s linear infinite alternate; }
-.stars-0 { animation-duration: 3.2s; animation-delay: -2s; }
-.stars-1 { animation-duration: 4.2s; animation-delay: -5s; }
-.stars-2 { animation-duration: 3.6s; animation-delay: -3s; }
-.stars-3 { animation-duration: 4.6s; animation-delay: -7s; }
-.coast-water-surface { animation: coast-water-flow 3.6s linear infinite alternate; animation-delay: -1s; will-change: transform; }
-.coast-reflections { animation: coast-beacon-light 3.8s linear infinite alternate; animation-delay: -2s; }
-.coast-art .coast-motion { animation-play-state: paused; }
-.scenery[data-wallpaper="playing"] .coast-motion { animation-play-state: running; }
-@keyframes coast-twinkle { from { opacity: .2; } to { opacity: 1; } }
-@keyframes coast-water-flow { from { transform: translate(-3px,-1.5px); } to { transform: translate(5px,3.5px); } }
-@keyframes coast-beacon-light { from { opacity: .2; } to { opacity: 1; } }
-@media (max-width:700px) { .coast-water-surface { animation-duration: 4.2s; } }
-@media (prefers-reduced-motion:reduce) {
-  .coast-art .coast-motion { animation: none !important; }
-}
-
-.wallpaper-toggle:disabled { cursor: default; opacity: .85; }

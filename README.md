@@ -31,7 +31,6 @@ python3 -m http.server 8080 --bind 127.0.0.1
 index.html          页面内容、元信息、链接与对话框
 styles.css          字体、主题与响应式布局
 script.js           菜单、主题、对话框和复制交互
-wallpaper.js        壁纸播放偏好、暂停与可见性控制
 favicon.svg         通用头像及站点图标占位图
 assets/
   icons/                    Tabler 图标及许可证
@@ -64,7 +63,7 @@ LICENSE             项目 MIT 许可证
 
 ## 部署
 
-将 `index.html`、`styles.css`、`script.js`、`wallpaper.js`、`favicon.svg`、完整的 `assets/` 与 `fonts/` 目录上传到静态托管服务，保持目录结构。无需构建命令。更新 CSS/JS 时，同步更新 HTML 中相应资源 URL 的版本查询参数，避免旧缓存。
+将 `index.html`、`styles.css`、`script.js`、`favicon.svg`、完整的 `assets/` 与 `fonts/` 目录上传到静态托管服务，保持目录结构。无需构建命令。更新 CSS/JS 时，同步更新 HTML 中相应资源 URL 的版本查询参数，避免旧缓存。
 
 可以使用 GitHub Pages 或其他静态托管服务。仓库本身不配置自动发布流程。
 
@@ -72,21 +71,15 @@ LICENSE             项目 MIT 许可证
 
 - 本项目代码、文档及通用占位图标采用 [MIT License](LICENSE)。再分发时保留版权与许可文本。
 - 图标来自 [Tabler Icons](https://github.com/tabler/tabler-icons)，v3.35.0，MIT；完整许可位于 `assets/icons/LICENSE.txt`。
-- 夜海壁纸以参考图轮廓进行离线 SVG 描摹，补入天空渐变与星点；只分发矢量路径与 CSS 动画，作为模板源码随 MIT 许可分发。
+- 夜海壁纸以参考图轮廓进行离线 SVG 描摹，补入天空渐变与星点；只分发静态矢量路径，作为模板源码随 MIT 许可分发。
 - JetBrains Mono 字体采用 SIL Open Font License 1.1，见 `fonts/OFL-JetBrains-Mono.txt`。
 - Noto Serif SC 字体采用 SIL Open Font License 1.1，见 `fonts/OFL-Noto-Serif-SC.txt`。
 - 随附 Source Han Serif 版权与许可声明见 `fonts/OFL-Source-Han-Serif.txt`；目录中无单独以 Source Han Serif 命名的字体文件。
 
 第三方字体及图标遵循各自许可证，不适用本项目代码的 MIT 授权声明。
 
-## 动态壁纸
+## 静态 SVG 壁纸
 
-壁纸是 `index.html` 内 `.coast-art` 对应的完整 SVG。云层、远山、海岸、礁石、浪花与灯光细节以原夜海图为参考，使用 VTracer 离线描摹成路径，再以 SVGO 压缩；天空的连续渐变和原图中的小星点另行补回。网站运行时不需要这些制作工具，也不加载背景位图、Canvas 或 WebGL。
+壁纸保留细致的夜海 SVG 轮廓、天空渐变与星点，完整内联在 `index.html` 的 `.coast-art` 中。没有背景动画、播放按钮、壁纸控制脚本或持续渲染循环；不使用 Canvas、WebGL 或背景位图。
 
-为保留细节，静态 SVG 源码约 2 MB，明显大于简化插画。静态轮廓封装为 `data:image/svg+xml` 矢量资源供浏览器缓存，水面通过 `<use>` 复用同一资源，避免每帧重绘上万条路径；内嵌资源仍全部是 SVG 路径，没有 PNG/JPEG 等位图。构图贴近参考图，但放大后仍可见矢量化的色块与轮廓，不能等同于照片的全部细节。部署时建议启用 HTML 压缩，避免直接传输未压缩页面。
-
-CSS 对四组星点、灯塔光晕与一整片水面施加动画。水面通过 SVG `<use>` 复用原有细节轮廓，并用羽化遮罩限定范围；约 3.6 秒内产生 8px 横向、5px 纵向位移，手机端节奏为 4.2 秒。天空、地平线与前景主体保持稳定。
-
-`wallpaper.js` 只管理播放状态，不逐帧绘图。首屏的「暂停动态壁纸 / 播放动态壁纸」按钮保存 `homepage-wallpaper` 偏好；页面隐藏、离开首屏或开启减少动态效果时暂停。系统开启减少动态效果时，按钮显示「系统已关闭动效」，说明静止原因。省流量模式默认暂停。禁用 JavaScript 时，完整 SVG 仍显示为静态壁纸。
-
-调整画面时编辑或替换 HTML 中 `.coast-art` 的 SVG；调整动效时修改 `styles.css` 中 `coast-` 开头的动画。主页与通用模板使用同一份场景，模板不包含个人资料。
+为保留细节，SVG 源码约 2 MB，建议部署时启用 HTML gzip 压缩。页面导航、主题切换、邮箱复制等功能由 `script.js` 提供。
