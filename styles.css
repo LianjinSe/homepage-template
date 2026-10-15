@@ -321,34 +321,22 @@ html[data-input="keyboard"] .hero > :not(.scroll-cue) { animation: none; }
 .hero > .wallpaper-toggle { animation: none; }
 @media (hover:hover) and (pointer:fine) { .wallpaper-toggle:hover { color: var(--text); } }
 
-/* All scenery is inline SVG. Motion uses native transform/opacity animations. */
+/* Detailed contour tracing of the original scene; only highlights move. */
 .coast-art { display: block; width: 100%; height: 100%; }
-.coast-stars { animation: coast-twinkle 6s linear infinite alternate; }
-.stars-0 { animation-duration: 6s; animation-delay: -2s; }
-.stars-1 { animation-duration: 8s; animation-delay: -5s; }
-.stars-2 { animation-duration: 7s; animation-delay: -3s; }
-.stars-3 { animation-duration: 9s; animation-delay: -7s; }
-.coast-sparks { animation: coast-glimmer 7s linear infinite alternate; animation-delay: -4s; }
-.coast-cloud-back { animation: coast-cloud-float 48s linear infinite alternate; animation-delay: -18s; }
-.coast-cloud-front { animation: coast-cloud-float 36s linear infinite alternate-reverse; animation-delay: -12s; }
-.coast-beacon-glow { animation: coast-glimmer 9s linear infinite alternate; animation-delay: -3s; }
-.coast-reflections { animation: coast-reflection-drift 8s var(--ease) infinite alternate; animation-delay: -2s; }
-.coast-ripples-far,.coast-wave-far { animation: coast-distant-tide 14s var(--ease) infinite alternate; animation-delay: -4s; }
-.coast-ripples-mid,.coast-wave-mid { animation: coast-middle-tide 11s var(--ease) infinite alternate; animation-delay: -6s; }
-.coast-ripples-near,.coast-wave-near { animation: coast-near-tide 9s var(--ease) infinite alternate; animation-delay: -3s; }
+.coast-stars { animation: coast-twinkle 7s linear infinite alternate; }
+.stars-0 { animation-duration: 7s; animation-delay: -2s; }
+.stars-1 { animation-duration: 9s; animation-delay: -5s; }
+.stars-2 { animation-duration: 8s; animation-delay: -3s; }
+.stars-3 { animation-duration: 10s; animation-delay: -7s; }
+.coast-wave-mid { animation: coast-water-shimmer 10s var(--ease) infinite alternate; animation-delay: -3s; }
+.coast-wave-near { animation: coast-water-shimmer 8s var(--ease) infinite alternate-reverse; animation-delay: -5s; }
+.coast-reflections { animation: coast-beacon-light 8s linear infinite alternate; animation-delay: -2s; }
 .coast-art .coast-motion { animation-play-state: paused; }
 .scenery[data-wallpaper="playing"] .coast-motion { animation-play-state: running; }
-@keyframes coast-twinkle { from { opacity: .3; } to { opacity: .95; } }
-@keyframes coast-glimmer { from { opacity: .55; } to { opacity: 1; } }
-@keyframes coast-cloud-float { from { transform: translate(-12px,0); } to { transform: translate(14px,-5px); } }
-@keyframes coast-distant-tide { from { transform: translate(-6px,-1px); } to { transform: translate(8px,2px); } }
-@keyframes coast-middle-tide { from { transform: translate(7px,-2px); } to { transform: translate(-10px,4px); } }
-@keyframes coast-near-tide { from { transform: translate(10px,-3px); opacity: .7; } to { transform: translate(-12px,7px); opacity: 1; } }
-@keyframes coast-reflection-drift { from { transform: translate(-3px,0); opacity: .6; } to { transform: translate(3px,3px); opacity: 1; } }
-@media (max-width:700px) {
-  /* Keep the nearest tide and star layers; reduce independent moving layers. */
-  .coast-cloud-back,.coast-ripples-far,.coast-ripples-mid { animation: none; }
-}
+@keyframes coast-twinkle { from { opacity: .35; } to { opacity: 1; } }
+@keyframes coast-water-shimmer { from { transform: translate(-.8px,-.3px); opacity: .08; } to { transform: translate(1.2px,.6px); opacity: .28; } }
+@keyframes coast-beacon-light { from { opacity: .4; } to { opacity: .85; } }
+@media (max-width:700px) { .coast-wave-mid { animation: none; opacity: .12; } }
 @media (prefers-reduced-motion:reduce) {
   .coast-art .coast-motion { animation: none !important; }
   .wallpaper-toggle { display: none !important; }

@@ -72,7 +72,7 @@ LICENSE             项目 MIT 许可证
 
 - 本项目代码、文档及通用占位图标采用 [MIT License](LICENSE)。再分发时保留版权与许可文本。
 - 图标来自 [Tabler Icons](https://github.com/tabler/tabler-icons)，v3.35.0，MIT；完整许可位于 `assets/icons/LICENSE.txt`。
-- 夜海壁纸由内联 SVG 绘制，使用路径、圆形、渐变和 CSS 动画；作为模板源码随 MIT 许可分发。
+- 夜海壁纸以参考图轮廓进行离线 SVG 描摹，补入天空渐变与星点；只分发矢量路径与 CSS 动画，作为模板源码随 MIT 许可分发。
 - JetBrains Mono 字体采用 SIL Open Font License 1.1，见 `fonts/OFL-JetBrains-Mono.txt`。
 - Noto Serif SC 字体采用 SIL Open Font License 1.1，见 `fonts/OFL-Noto-Serif-SC.txt`。
 - 随附 Source Han Serif 版权与许可声明见 `fonts/OFL-Source-Han-Serif.txt`；目录中无单独以 Source Han Serif 命名的字体文件。
@@ -81,10 +81,12 @@ LICENSE             项目 MIT 许可证
 
 ## 动态壁纸
 
-整个壁纸是 `index.html` 中 `.coast-art` 对应的内联 SVG：星空、云层、远山、灯塔、海面、倒影、近岸浪花和礁石均由矢量图形组成，不包含嵌入的位图、Canvas 或 WebGL。SVG 通过 `viewBox` 和 `preserveAspectRatio` 自适应屏幕。
+壁纸是 `index.html` 内 `.coast-art` 对应的完整 SVG。云层、远山、海岸、礁石、浪花与灯光细节以原夜海图为参考，使用 VTracer 离线描摹成路径，再以 SVGO 压缩；天空的连续渐变和原图中的小星点另行补回。网站运行时不需要这些制作工具，也不加载背景位图、Canvas 或 WebGL。
 
-动画定义在 `styles.css`：星点分组闪烁、云层缓慢漂移、远中近三层海浪错速移动、灯塔光晕与倒影渐变明暗。动画只改变 `transform` 与 `opacity`，由浏览器原生动画系统执行。手机端减少独立运动图层。
+为保留细节，SVG 源码约 2 MB（gzip 压缩后约 0.7 MB），明显大于简化插画。构图贴近参考图，但放大后仍可见矢量化的色块与轮廓，不能等同于照片的全部细节。部署时建议启用 HTML 压缩，避免直接传输未压缩页面。
 
-`wallpaper.js` 只管理播放状态，不逐帧绘图。首屏的「暂停壁纸 / 播放壁纸」按钮保存 `homepage-wallpaper` 偏好；页面隐藏、离开首屏或开启减少动态效果时暂停。省流量模式默认暂停。禁用 JavaScript 时，SVG 壁纸仍完整显示为静态插画；减少动态效果的 CSS 规则也可独立生效。
+CSS 只对四组星点、水面选出的高光轮廓和灯塔光晕施加轻微透明度或位移动画。大部分复杂路径保持静止，避免整幅场景漂移。手机端减少一组水面动画。
 
-调整画面时编辑 HTML 中 SVG 的 `<defs>`、路径与图层；修改动效速度、幅度或方向时编辑 CSS 中 `coast-` 开头的动画。主页与模板分别保留同一份完整 SVG，不需要下载独立壁纸文件。
+`wallpaper.js` 只管理播放状态，不逐帧绘图。首屏的「暂停壁纸 / 播放壁纸」按钮保存 `homepage-wallpaper` 偏好；页面隐藏、离开首屏或开启减少动态效果时暂停。省流量模式默认暂停。禁用 JavaScript 时，完整 SVG 仍显示为静态壁纸。
+
+调整画面时编辑或替换 HTML 中 `.coast-art` 的 SVG；调整动效时修改 `styles.css` 中 `coast-` 开头的动画。主页与通用模板使用同一份场景，模板不包含个人资料。
