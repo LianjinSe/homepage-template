@@ -4,6 +4,47 @@
   const menuToggle = document.querySelector('.menu-toggle');
   const themeToggle = document.querySelector('.theme-toggle');
   const desktop = window.matchMedia('(min-width: 701px)');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const revealElements = Array.from(document.querySelectorAll('[data-reveal]'));
+
+  // Content is visible without JavaScript; reveal it only once, as it enters view.
+  let revealObserver;
+  function revealWithin(target) {
+    if (!target || !target.matches('.page-section')) return;
+    [target, ...target.querySelectorAll('[data-reveal]')].forEach(element => {
+      element.classList.remove('is-pending');
+      revealObserver?.unobserve(element);
+    });
+  }
+  if (!reduceMotion.matches && 'IntersectionObserver' in window) {
+    revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('is-pending');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .05, rootMargin: '0px 0px -24px 0px' });
+    revealElements.forEach(element => {
+      if (element.getBoundingClientRect().top >= innerHeight) element.classList.add('is-pending');
+      revealObserver.observe(element);
+    });
+  }
+  reduceMotion.addEventListener('change', () => {
+    if (reduceMotion.matches) {
+      revealElements.forEach(element => element.classList.remove('is-pending'));
+      revealObserver?.disconnect();
+    }
+  });
+  document.addEventListener('pointerdown', () => { root.dataset.input = 'pointer'; }, { passive: true });
+  document.addEventListener('keydown', event => {
+    root.dataset.input = 'keyboard';
+    if (event.key === 'Escape' && !menu.hidden) closeMenu(true);
+  });
+  document.addEventListener('focusin', event => {
+    const section = event.target.closest('.page-section');
+    if (section) revealWithin(section);
+  });
 
   function closeMenu(restoreFocus = false) {
     menu.hidden = true;
@@ -19,16 +60,35 @@
     menuToggle.setAttribute('aria-expanded', String(opening));
     menuToggle.setAttribute('aria-label', opening ? '关闭导航菜单' : '打开导航菜单');
   });
-  menu.addEventListener('click', event => {
-    if (event.target.closest('a, button')) closeMenu();
-  });
   document.addEventListener('click', event => {
     if (!menu.hidden && !event.target.closest('.site-header')) closeMenu();
   });
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && !menu.hidden) closeMenu(true);
-  });
   desktop.addEventListener('change', () => { if (desktop.matches) closeMenu(); });
+
+  // Every navigation item and hero action points to a real section on this page.
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', event => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const hash = link.getAttribute('href');
+      const target = document.getElementById(hash.slice(1));
+      if (!target) return;
+      event.preventDefault();
+      closeMenu();
+      revealWithin(target);
+      if (location.hash !== hash) history.pushState(null, '', hash);
+      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+      const behavior = reduceMotion.matches || event.detail === 0 ? 'instant' : 'smooth';
+      target.scrollIntoView({ behavior, block: 'start' });
+      scheduleScrollUpdate();
+    });
+  });
+  function revealLocation() {
+    revealWithin(document.getElementById(location.hash.slice(1)));
+    scheduleScrollUpdate();
+  }
+  window.addEventListener('hashchange', revealLocation);
+  window.addEventListener('popstate', revealLocation);
 
   function updateTheme() {
     const light = root.dataset.theme === 'light';
@@ -44,67 +104,59 @@
     updateTheme();
   });
 
-  // Native dialogs provide keyboard focus containment and Escape dismissal.
-  function openDialog(id) {
-    const dialog = document.getElementById(id);
-    if (!dialog || dialog.open) return;
-    const menuWasOpen = !menu.hidden;
-    closeMenu();
-    const trigger = menuWasOpen ? menuToggle : document.activeElement;
-    dialog.addEventListener('close', () => {
-      if (trigger instanceof HTMLElement) trigger.focus({ preventScroll: true });
-    }, { once: true });
-    dialog.showModal();
-  }
-  document.querySelectorAll('[data-dialog]').forEach(trigger => {
-    trigger.addEventListener('click', () => openDialog(trigger.dataset.dialog));
-  });
+  const emailDialog = document.getElementById('email-dialog');
   document.querySelector('[data-email]').addEventListener('click', event => {
     event.preventDefault();
-    openDialog('email-dialog');
+    const trigger = event.currentTarget;
+    emailDialog.addEventListener('close', () => trigger.focus({ preventScroll: true }), { once: true });
+    emailDialog.showModal();
   });
-  document.querySelectorAll('dialog').forEach(dialog => {
-    dialog.querySelector('[data-close]').addEventListener('click', () => dialog.close());
-    dialog.addEventListener('click', event => {
-      if (event.target !== dialog) return;
-      const box = dialog.getBoundingClientRect();
-      if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close();
-    });
+  emailDialog.querySelector('[data-close]').addEventListener('click', () => emailDialog.close());
+  emailDialog.addEventListener('click', event => {
+    if (event.target !== emailDialog) return;
+    const box = emailDialog.getBoundingClientRect();
+    if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) emailDialog.close();
   });
-
-  const copyButton = document.getElementById('copy-email');
   const status = document.querySelector('.copy-status');
-  copyButton.addEventListener('click', async () => {
+  document.getElementById('copy-email').addEventListener('click', async () => {
     const email = document.querySelector('.email-address').textContent.trim();
     try {
       await navigator.clipboard.writeText(email);
       status.textContent = '邮箱已复制，可以粘贴到邮件应用中。';
     } catch (_) {
-      // Keep a usable mailto link and selectable address if the browser denies copying.
       status.textContent = '暂时无法自动复制，请长按或选中上方邮箱复制。';
     }
   });
-  document.getElementById('email-dialog').addEventListener('close', () => { status.textContent = ''; });
+  emailDialog.addEventListener('close', () => { status.textContent = ''; });
 
-  const sectionLinks = Array.from(document.querySelectorAll('.desktop-nav a[href^="#"]'));
+  const sectionLinks = Array.from(document.querySelectorAll('.desktop-nav a[href^="#"], .mobile-menu a[href^="#"]'));
+  const sections = Array.from(document.querySelectorAll('.page-section'));
+  const header = document.querySelector('.site-header');
+  const progress = document.querySelector('.reading-progress');
   let scheduled = false;
-  function markSection() {
-    const contact = document.getElementById('contact').getBoundingClientRect();
-    const work = document.getElementById('work').getBoundingClientRect();
-    const hash = window.location.hash;
-    const targetVisible = hash === '#contact' ? contact.top < innerHeight && contact.bottom > 140 : hash === '#work' && work.top < innerHeight && work.bottom > 140;
-    const current = targetVisible && window.scrollY > 0 ? hash : work.top <= 190 ? '#work' : '#top';
+  function updateScroll() {
+    const threshold = header.getBoundingClientRect().bottom + 40;
+    let current = '#top';
+    sections.forEach(section => {
+      if (section.getBoundingClientRect().top <= threshold) current = `#${section.id}`;
+    });
+    const max = root.scrollHeight - innerHeight;
+    if (max > 0 && scrollY >= max - 2) current = '#contact';
     sectionLinks.forEach(link => {
       const active = link.getAttribute('href') === current;
       link.classList.toggle('is-active', active);
       if (active) link.setAttribute('aria-current', current === '#top' ? 'page' : 'location');
       else link.removeAttribute('aria-current');
     });
+    progress.style.transform = `scaleX(${max > 0 ? Math.min(scrollY / max, 1) : 0})`;
     scheduled = false;
   }
-  window.addEventListener('scroll', () => {
-    if (!scheduled) { scheduled = true; requestAnimationFrame(markSection); }
-  }, { passive: true });
-  window.addEventListener('hashchange', markSection);
-  markSection();
+  function scheduleScrollUpdate() {
+    if (!scheduled) { scheduled = true; requestAnimationFrame(updateScroll); }
+  }
+  window.addEventListener('scroll', scheduleScrollUpdate, { passive: true });
+  window.addEventListener('resize', scheduleScrollUpdate);
+  window.addEventListener('pageshow', revealLocation);
+  document.fonts?.ready.then(scheduleScrollUpdate);
+  revealLocation();
 })();
