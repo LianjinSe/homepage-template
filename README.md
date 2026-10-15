@@ -31,6 +31,7 @@ python3 -m http.server 8080 --bind 127.0.0.1
 index.html          页面内容、元信息、链接与对话框
 styles.css          字体、主题与响应式布局
 script.js           菜单、主题、对话框和复制交互
+wallpaper.js        夜海涟漪、星光与播放控制
 favicon.svg         通用头像及站点图标占位图
 assets/
   coast-night.webp          桌面背景
@@ -65,7 +66,7 @@ LICENSE             项目 MIT 许可证
 
 ## 部署
 
-将 `index.html`、`styles.css`、`script.js`、`favicon.svg`、完整的 `assets/` 与 `fonts/` 目录上传到静态托管服务，保持目录结构。无需构建命令。更新 CSS/JS 时，同步更新 HTML 中相应资源 URL 的版本查询参数，避免旧缓存。
+将 `index.html`、`styles.css`、`script.js`、`wallpaper.js`、`favicon.svg`、完整的 `assets/` 与 `fonts/` 目录上传到静态托管服务，保持目录结构。无需构建命令。更新 CSS/JS 时，同步更新 HTML 中相应资源 URL 的版本查询参数，避免旧缓存。
 
 可以使用 GitHub Pages 或其他静态托管服务。仓库本身不配置自动发布流程。
 
@@ -79,3 +80,9 @@ LICENSE             项目 MIT 许可证
 - 随附 Source Han Serif 版权与许可声明见 `fonts/OFL-Source-Han-Serif.txt`；目录中无单独以 Source Han Serif 命名的字体文件。
 
 第三方字体及图标遵循各自许可证，不适用本项目代码的 MIT 授权声明。
+
+## 动态壁纸
+
+`wallpaper.js` 使用现有本地夜海图片，在 WebGL 中对水面进行轻微位移，并让原有星点缓慢明暗变化。首屏的「暂停壁纸 / 播放壁纸」按钮可以独立控制背景动效，偏好保存在 `homepage-wallpaper` 中。
+
+桌面渲染上限为 24 帧/秒，手机为 20 帧/秒，并限制画布像素数。页面隐藏或滚动离开首屏时停止渲染，回到首屏再继续。开启「减少动态效果」、WebGL 不可用或图形上下文丢失时显示原始静态壁纸；开启省流量时默认暂停。动态效果不需要视频下载或第三方动画库。
