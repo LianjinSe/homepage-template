@@ -33,6 +33,7 @@ styles.css          字体、主题与响应式布局
 script.js           菜单、主题、对话框和复制交互
 favicon.svg         通用头像及站点图标占位图
 assets/
+  coast-static-58ca27d54477.svg  静态 SVG 壁纸
   icons/                    Tabler 图标及许可证
 fonts/              本地字体及许可文件
 LICENSE             项目 MIT 许可证
@@ -78,8 +79,10 @@ LICENSE             项目 MIT 许可证
 
 第三方字体及图标遵循各自许可证，不适用本项目代码的 MIT 授权声明。
 
-## 静态 SVG 壁纸
+## 静态 SVG 壁纸与性能
 
-壁纸保留细致的夜海 SVG 轮廓、天空渐变与星点，完整内联在 `index.html` 的 `.coast-art` 中。没有背景动画、播放按钮、壁纸控制脚本或持续渲染循环；不使用 Canvas、WebGL 或背景位图。
+壁纸保存在 `assets/coast-static-58ca27d54477.svg`，由装饰性图片元素加载，保留原有 SVG 路径、渐变和星点。没有背景动画、播放脚本、Canvas 或 WebGL。独立 SVG 图片可由浏览器缓存，主 HTML 不再包含约 1.8 万个 SVG 节点。
 
-为保留细节，SVG 源码约 2 MB，建议部署时启用 HTML gzip 压缩。页面导航、主题切换、邮箱复制等功能由 `script.js` 提供。
+SVG 文件仍约 2 MB；服务器应为 `image/svg+xml` 启用 gzip 和长期缓存。`deploy/nginx-static-svg.conf` 提供可复制到 Nginx 现有 server 块的可选配置：gzip、Vary 和内容哈希文件的一年缓存。GitHub Pages 等托管服务使用各自的压缩、缓存策略。
+
+壁纸文件名包含内容哈希。修改壁纸后应使用新文件名，并同步更新 HTML 的 `src`，避免旧缓存。部署时同步完整 `assets/` 目录。页面的玻璃模糊强度为桌面 12px、手机 6px，以降低滚动时的渲染成本；原有字体和页面交互继续保留。

@@ -97,7 +97,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible { outline: 2px solid 
 .scenery { position: fixed; z-index: -1; inset: 0; background: #0c1b2d; overflow: hidden; pointer-events: none; }
 .scenery::after { content: ""; position: absolute; inset: 0; background: rgb(6 17 34 / 7%); }
 html[data-theme="light"] .scenery::after { background: rgb(224 236 249 / 87%); }
-.glass { border: 1px solid var(--glass-edge); background: var(--glass); box-shadow: inset 0 1px 0 rgb(227 238 255 / 7%),var(--shadow); backdrop-filter: blur(24px) saturate(135%); -webkit-backdrop-filter: blur(24px) saturate(135%); }
+.glass { border: 1px solid var(--glass-edge); background: var(--glass); box-shadow: inset 0 1px 0 rgb(227 238 255 / 7%),var(--shadow); backdrop-filter: blur(12px) saturate(135%); -webkit-backdrop-filter: blur(12px) saturate(135%); }
 .icon { display: inline-block; width: 22px; height: 22px; flex: none; background-color: currentColor; mask: var(--icon) center / contain no-repeat; -webkit-mask: var(--icon) center / contain no-repeat; }
 .icon-folder { --icon: url('assets/icons/folder.svg'); }
 .icon-notes { --icon: url('assets/icons/notes.svg'); }
@@ -140,7 +140,7 @@ h1 span { display: inline-block; }
 .button .icon { width: 19px; height: 19px; }
 .hero-actions .button { min-width: 168px; }
 .button-primary { background: var(--primary); color: var(--primary-text); box-shadow: 0 4px 18px rgb(10 25 49 / 12%); }
-.button-secondary { background: var(--control); color: var(--text); border-color: var(--glass-edge); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.button-secondary { background: var(--control); color: var(--text); border-color: var(--glass-edge); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .skills { display: flex; justify-content: center; gap: 18px; margin: 20px 0 0; color: var(--text-2); font-size: 14px; letter-spacing: .04em; }
 .skills span { opacity: .6; }
 /* Sections follow the original long-form reading order. */
@@ -315,3 +315,9 @@ html[data-input="keyboard"] .hero > :not(.scroll-cue) { animation: none; }
 
 /* Static detailed SVG wallpaper: no playback controls or background animations. */
 .coast-art { display: block; width: 100%; height: 100%; }
+
+/* Lower readback cost on mobile while keeping the glass tint. */
+@media (max-width:700px) {
+  .glass { backdrop-filter: blur(6px) saturate(120%); -webkit-backdrop-filter: blur(6px) saturate(120%); }
+  .button-secondary { backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
